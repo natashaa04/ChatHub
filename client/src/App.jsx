@@ -1,53 +1,22 @@
 import React, { useState } from "react";
 import "./App.css";
+import UserList from "./UserList/UserList";
 
 function App() {
   const [messages, setMessages] = useState([
     { id: 1, sender: "John", content: "Hello!", timestamp: "10:00 AM" },
-    { id: 2, sender: "Jane", content: "Hi there!", timestamp: "10:05 AM" },
-    { id: 3, sender: "John", content: "How are you?", timestamp: "10:10 AM" },
-    { id: 2, sender: "Jane", content: "Hi there!", timestamp: "10:05 AM" },
-    { id: 3, sender: "John", content: "How are you?", timestamp: "10:10 AM" },
-    { id: 2, sender: "Jane", content: "Hi there!", timestamp: "10:05 AM" },
-    { id: 3, sender: "John", content: "How are you?", timestamp: "10:10 AM" },
+    { id: 2, sender: "Jane", content: "Hi there!", timestamp: "10:01 AM" },
+    { id: 3, sender: "John", content: "How are you?", timestamp: "10:02 AM" },
   ]);
 
   return (
     <div className="chat-app">
-      <header>
+      <header >
         <h1>Chat Application</h1>
       </header>
       <div className="container">
         <div className="sidebar">
-          <ul className="contact-list">
-            <li>
-              <div className="avatar"></div>
-              <div className="user-info">
-                <h2>John</h2>
-                <p className="last-message">
-                  Last message from John    10:10 AM
-                </p>
-              </div>
-            </li>
-            <li>
-              <div className="avatar"></div>
-              <div className="user-info">
-                <h2>User 2</h2>
-                <p className="last-message">
-                  LastmessagefromUser2   09:45 AM
-                </p>
-              </div>
-            </li>
-            <li>
-              <div className="avatar"></div>
-              <div className="user-info">
-                <h2>User 3</h2>
-                <p className="last-message">
-                  LastmessagefromUser3   09:30 AM
-                </p>
-              </div>
-            </li>
-          </ul>
+          <UserList />
         </div>
         <div className="chat-window">
           <div className="chat-header">
@@ -81,3 +50,6 @@ function App() {
 }
 
 export default App;
+
+
+

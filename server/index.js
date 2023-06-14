@@ -4,7 +4,7 @@ import dotenv from 'dotenv'
 import cors from 'cors';
 import bodyParser from "body-parser";
 import cookieParser from "cookie-parser";
-
+import user from "./routes/User.js";
 import path from "path";
 import { fileURLToPath } from "url";
 import cloudinary from "cloudinary";
@@ -41,6 +41,8 @@ cloudinary.config({
   api_key: process.env.CLOUDINARY_API_KEY,
   api_secret: process.env.CLOUDINARY_API_SECRET
 });
+
+app.use("/api/v1", user);
 
 
 

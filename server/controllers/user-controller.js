@@ -1,6 +1,6 @@
 
 import User from "../models/UserSchema.js";
-import cloudinary from 'cloudinary'
+import cloudinary from 'cloudinary';
 
 
 
@@ -122,6 +122,8 @@ export const logout = async (req, res) => {
 };
 
 
+
+
 export const getAllUsers = async (req, res) => {
   try {
     const users = await User.find({
@@ -160,3 +162,6 @@ export const myProfile = async (req, res) => {
       });
     }
   };
+
+
+  

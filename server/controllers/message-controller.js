@@ -1,19 +1,39 @@
 import Message from "../models/MessageeSchema.js"
 import Conversation from "../models/ConversationSchema.js"
+import { getConversation } from "./conversation-controller.js";
+
+
 
 //add new message
-export const addMessage = async(req,res)=>{
+export const addMessage = async (req, res) => {
+  const { sender, text, receiver } = req.body;
 
-    const newMessage = new Message(req.body);
+  const conversationId = getConversation(sender, receiver);
 
-    try {
-      const savedMessage = await newMessage.save();
-      res.status(200).json(savedMessage);
-    } catch (err) {
-      res.status(500).json(err);
-    }
-  
-}
+  const newMessage = new Message({
+    conversationId,
+    sender,
+    text,
+  });
+
+  try {
+    const savedMessage = await newMessage.save();
+
+    // Update the conversation's updatedAt field so that we can access conversation according to time 
+    const conversation = await Conversation.findByIdAndUpdate(
+      conversationId,
+      { updatedAt: Date.now() },
+      { new: true }
+    );
+
+    res.status(200).json({ savedMessage, conversation });
+  } catch (err) {
+    res.status(500).json(err);
+  }
+};
+
+
+
 
 //get all messages of a particular conversation
 export const getMessage = async (req, res) => {

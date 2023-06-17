@@ -38,7 +38,7 @@ export const addMessage = async (req, res) => {
 //get all messages of a particular conversation
 export const getMessage = async (req, res) => {
     try {
-      const page = req.query.page || 1; // Get the page number from the query parameters
+     const page = req.query.page ? parseInt(req.query.page) : 1; // Get the page number from the query parameters
       const limit = 15; // Number of messages to retrieve per page
       const skip = (page - 1) * limit; // Calculate the number of messages to skip
   

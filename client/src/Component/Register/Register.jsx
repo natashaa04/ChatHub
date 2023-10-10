@@ -18,8 +18,8 @@ const Register = () => {
 
   const dispatch = useDispatch();
   const alert = useAlert();
-  const { loading, error } = useSelector((state) => state.user);
-
+  const { loading, error,} = useSelector((state) => state.user);
+console.log(loading);
   const handleImageChange = (e) => {
     const file = e.target.files[0];
 
@@ -92,7 +92,7 @@ const Register = () => {
           <Typography>Already Signed Up? Login Now</Typography>
         </Link>
 
-        <Button disabled={loading} type="submit"> 
+        <Button  type="submit"> 
           Sign Up
         </Button>
       </form>

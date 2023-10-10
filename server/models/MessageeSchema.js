@@ -1,4 +1,5 @@
 import mongoose from "mongoose";
+// import User from "./UserSchema";
 
 const MessageSchema = new mongoose.Schema(
   {
@@ -8,7 +9,9 @@ const MessageSchema = new mongoose.Schema(
       required: true,
     },
     sender: {
-      type: String,
+      type: mongoose.Schema.Types.ObjectId,
+      ref:'User',
+      required:true,
     },
     text: {
       type: String,

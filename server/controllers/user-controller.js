@@ -56,6 +56,9 @@ export const register = async (req, res) => {
   }
 };
 
+
+
+
 export const login=async(req,res)=>{
 
 
@@ -63,8 +66,8 @@ export const login=async(req,res)=>{
     const { email, password } = req.body;
 
     const user = await User.findOne({ email })
-      .select("+password")
-      .populate("posts followers following");
+      
+      
 
     if (!user) {
       return res.status(400).json({
@@ -89,12 +92,12 @@ export const login=async(req,res)=>{
       httpOnly: true,
     };
 
-    res.status(200).cookie("token", token, options).json({
+    res.status(200).json({
       success: true,
       user,
       token,
     });
-    console.log(res.cookies);
+
   } catch (error) {
     res.status(500).json({
       success: false,
@@ -126,9 +129,14 @@ export const logout = async (req, res) => {
 
 export const getAllUsers = async (req, res) => {
   try {
+    // Assuming you have a way to identify the logged-in user
+    const loggedInUserId = req.user.id; // Replace with the actual way you identify the user
+
+    // Modify the query to exclude the logged-in user
     const users = await User.find({
+      _id: { $ne: loggedInUserId }, // Exclude the user with the same ID as the logged-in user
       name: { $regex: req.query.name, $options: "i" },
-    });
+    }).sort({ createdAt: -1 }) ;
 
     res.status(200).json({
       success: true,
@@ -141,6 +149,7 @@ export const getAllUsers = async (req, res) => {
     });
   }
 };
+
 
 
 export const myProfile = async (req, res) => {

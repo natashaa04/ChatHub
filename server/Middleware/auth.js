@@ -3,7 +3,7 @@ import jwt from "jsonwebtoken";
 import User from "../models/UserSchema.js";
 
 
-export const isAuthenticated  = async (req, res, next) => {
+export const isAuthenticated  = async(req, res, next) => {
   try {
 
       const { authorization } = await req.headers;
@@ -16,7 +16,7 @@ export const isAuthenticated  = async (req, res, next) => {
         message: "Please login first",
       });
     }   
-    const token = authorization.replaceAll("Bearer ","")
+    const token = authorization.replace("Bearer ","")
     const decoded = await jwt.verify(token  , "abacabc456^%$");
 
     req.user = await User.findById(decoded._id);

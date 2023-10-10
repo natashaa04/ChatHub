@@ -1,9 +1,11 @@
 import {  Routes, Route } from "react-router-dom";
 
 import Login from "./Component/Login/Login";
+
 import {useSelector } from "react-redux";
 import { useEffect } from "react";
 import { loadUser } from "./Actions/User";
+import Chat from "./Component/Chat/Chat";
 
 import Register from "./Component/Register/Register";
 
@@ -29,20 +31,20 @@ const App=()=> {
 
   <div>
     
+    <Routes>
+<Route path="/" element={isAuthenticated ? <Chat/> : <Login />} />
+<Route
+  path="/login"
+  element={isAuthenticated ? <Chat /> : <Login />}
+/>
 
-      <Routes>
-        <Route path="/" element={isAuthenticated ? <Chat/> : <Login />} />
-        <Route
-          path="/login"
-          element={isAuthenticated ? <Chat /> : <Login />}
-        />
+<Route
+  path="/register"
+  element={isAuthenticated ? <Chat/> : <Register />}
+/>
 
-        <Route
-          path="/register"
-          element={isAuthenticated ? <Chat/> : <Register />}
-        />
+</Routes> 
 
-      </Routes>
       </div>
     
   );

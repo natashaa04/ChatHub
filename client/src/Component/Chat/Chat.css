@@ -1,31 +1,73 @@
 /* App.css */
+*{
+margin: 0;
+padding: 0;
+}
 
 .chat-app {
   display: flex;
   flex-direction: column;
   height: 100vh;
+  width: 100vw;
+  margin:0;
+  padding: 0;
+  /* overflow: hidden; */
+  /* border: 2px solid red; */
+}
+
+.headerDiv{
+   display: flex;
+   flex-direction: row;
+   justify-content: space-between;
+  background-color: black;
+  height: 12%;
+  color: white;
+}
+
+
+.logoutDiv{
+   /* background-color: #888; */
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  padding-top: 1%;
+  /* border: 2px solid yellow; */
+
 }
 
 .chat-app header {
   background-color: black;
   color: white;
+  
+}
+h1{
+  margin-top: 1%;
 }
 
 .container {
   display: flex;
+  flex-direction: row;
   flex: 1;
+  /* border: 10px dotted green; */
+  height: 67%;
+
 }
 
 .sidebar {
-  flex: 1;
+  width:30%;
   padding: 20px;
+  /* height: ; */
+  overflow-y: scroll;
   border-right: 1px solid #ccc;
+  /* border: 3px solid orange; */
 }
 
-.chat-window {
-  flex: 3;
-  display: flex;
+.chat-window{
+  width:70%;
+  height: 100%;
+  /* border:10px dotted orange ; */
   flex-direction: column;
+  display: flex;
 }
 
 .chat-header {
@@ -34,11 +76,11 @@
   padding: 10px;
   background-color: #fff;
   border-bottom: 1px solid #ccc;
-  height: 60px;
+  height: 5%;
 }
 
 
-.chat-header .avatar {
+ .avatar {
   width: 40px;
   height: 40px;
   border-radius: 50%;
@@ -47,7 +89,7 @@
 }
 
 
-.chat-header .user-info {
+.user-info {
   flex: 1;
   display: flex;
   flex-direction: column;
@@ -66,13 +108,6 @@
   margin: 0;
   font-size: 12px;
   color: #888;
-}
-
-.message-list {
-  flex: 1;
-  background-color: #fff;
-  padding: 20px;
-  overflow-y: auto;
 }
 
 .input-box {
@@ -106,25 +141,42 @@
   outline: none;
 }
 
-.message {
-  display: flex;
-  justify-content: flex-start;
-  align-items: flex-end;
-  margin-bottom: 10px;
-}
+/* .sidebar{
+width: 40vw;
+} */
 
+
+/* Updated CSS for the message list container */
+.scrollableDiv{
+  flex:1;
+  /* border: 3px solid brown; */
+}
+.message-list {
+  background-color: #fff;
+  padding: 20px;
+  overflow-y: auto;
+  background-color: #fff;
+  /* border: 2px solid green; */
+    height:95vh ;
+
+}
+/* Updated CSS for message content */
 .message-content {
-  background-color: #eaeaea;
+  background-color: rgb(213, 211, 211);
   padding: 8px 12px;
   border-radius: 8px;
+  display: inline-block;
+  max-width: 70%; /* Limit message content to 80% of its parent's width */
+  word-wrap: break-word; /* Ensure long words break and don't overflow */
 }
 
-.message-left {
-  justify-content: flex-start;
+
+ .message-left {
+  text-align: left;
 }
 
 .message-right {
-  justify-content: flex-end;
+  text-align: right;
 }
 
 .message-timestamp {
@@ -132,3 +184,8 @@
   color: #888;
   margin-left: 5px;
 }
+.input-box{
+  height: 2%;
+  /* border: 2px solid blue; */
+}
+

@@ -45,10 +45,12 @@ export const loginUser = async(email, password) => {
         },
       }
     );
+    console.log(data);
     localStorage.setItem("token", data.token)
     store.dispatch( LoginSuccess( data.user));
     
   } catch (error) {
+    console.log(error);
     store.dispatch(LoginFailure(error.response.data.message));
   }
  
@@ -83,14 +85,16 @@ export const getAllUsers =
     
 
     try {
-
+            console.log('hello')
       store.dispatch(allUsersRequest());
 
       const { data } = await axios.get(`${URL}/api/v1/users?name=${name}`, 
       { headers: {"Authorization" : `Bearer ${localStorage.getItem("token")}`} });
+      console.log('data=',data);
       store.dispatch(allUsersSuccess(data.users))
     
     } catch (error) {
+      console.log('error=',error)
       store.dispatch(allUsersFailure(error.response.data.message));
     }
  
@@ -121,6 +125,7 @@ export const logoutUser = async()=> {
 
 
 export const registerUser =
+
   async(avatar,name,email,password)=> {
 
     try {

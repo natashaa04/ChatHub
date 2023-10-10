@@ -5,6 +5,8 @@ import cors from 'cors';
 import bodyParser from "body-parser";
 import cookieParser from "cookie-parser";
 import user from "./routes/User.js";
+import conversation from "./routes/conversation.js";
+import message from "./routes/message.js";
 import path from "path";
 import { fileURLToPath } from "url";
 import cloudinary from "cloudinary";
@@ -43,6 +45,8 @@ cloudinary.config({
 });
 
 app.use("/api/v1", user);
+app.use("/api/v1", conversation);
+app.use("/api/v1", message);
 
 
 

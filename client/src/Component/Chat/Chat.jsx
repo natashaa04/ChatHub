@@ -1,6 +1,5 @@
 import React, { useState, useContext, useEffect, useRef, } from "react";
 import "./Chat.css";
-import UserList from "../UserList/UserList";
 import { io } from "socket.io-client";
 import { addMessage} from "../../Actions/Message";
 import { logoutUser } from "../../Actions/User";
@@ -100,25 +99,11 @@ function Chat() {
   }, [user]);
 
 
- 
-  
-    // const getMessages=async()=>{
-    //   setLoading(true);
-  
-    //   try{
-    //     await setPage(1);
-    //     console.log('page is' ,page);
-    //     const { data } = await axios.get(`http://localhost:8000/api/v1/getMessages/${user._id}/${currentChatUser._id}/1`, {
-    //       headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}` },
-    //     });
-    //     console.log(`messages are ${data} and loading is ${loading}`)
-    //     setMessages(data);
-    //     setPage(page+1);
-    //     setLoading(false);
-    //   }catch(err){
-    //     console.log(`error while getting messages is ${err}`)
-    //   }
-    // }
+  useEffect(() => {
+    scrollRef.current?.scrollIntoView({ behavior: "smooth" });
+  }, [Messages]);
+
+
 
   const updateChat=async(chatUser)=>{
 
@@ -192,19 +177,13 @@ function generateMessageKey(message) {
 }
 
 
-  // useEffect(() => {
-  //   scrollRef.current?.scrollIntoView({ behavior: "smooth" });
-  // }, [messages]);
-
- 
-
   const fetchMoreData = async () => {
     console.log(`currentchatuser is ${currentChatUser._id} and ${user._id}`)
     
 try{
     
     if (hasMoreMessages) {
-      console.log('page is',page);
+      console.log('page is in fetch data',page);
       const { data } = await axios.get(`http://localhost:8000/api/v1/getMessages/${user._id}/${currentChatUser._id}/${page}`, {
         headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}` },
       });
@@ -238,13 +217,21 @@ try{
     const minutes = date.getMinutes().toString().padStart(2, '0');
     return `${hours}:${minutes}`;
   }
+ const lastMessageShort=(input)=>{
+  if (input.length <= 8) {
+    return input; // Return the input as is if it's not longer than maxLength
+  } else {
+    return input.substring(0, 8) + '...'; // Display the first 5 characters with three dots
+  }
+
+  }
     
 
   return (
     <div className="chat-app">
     
         <div className="headerDiv" >
-          <h1>Chat Application</h1>
+          <h1>C h a t H u b</h1>
           <div className="logoutDiv" onClick={logoutUser}><LogoutIcon >Logout</LogoutIcon>Logout</div>
         </div>
       
@@ -260,7 +247,7 @@ try{
             <h2 className="name">{chatUser.name}</h2>
             <p className="timestamp">{formatDistanceToNow(new Date(chatUser.updatedAt), { addSuffix: true })}</p>
             </div>
-            <p className="last-message">{chatUser.lastMessage}</p>
+            <p className="last-message">{lastMessageShort(chatUser.lastMessage)}</p>
          
           </div>
         </div>
@@ -278,7 +265,7 @@ try{
               </div>
             </div>
              <div
-   className="scrollableDiv"
+   id="scrollableDiv"
      style={{
     height: 300,
     overflow: 'auto',
@@ -315,26 +302,13 @@ try{
 
 
             <div className="input-box">
-{/*               
-              <input type="text"
-                placeholder="Type your message"
-                value={newMessage}
-                onChange={(e) => setNewMessage(e.target.value)}
-              /> */}
-                <InputEmoji
+      <InputEmoji
       value={newMessage}
       onChange={setNewMessage}
       cleanOnEnter
       onEnter={handleSubmit}
       placeholder="Type a message"
     />
-              {/* <button
-               className="send-button" 
-              onClick={handleSubmit}
-              >
-                Send
-              </button> */}
-
             </div>
           </div>
 

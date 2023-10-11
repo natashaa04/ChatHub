@@ -8,7 +8,7 @@ padding: 0;
   display: flex;
   flex-direction: column;
   height: 100vh;
-  width: 100vw;
+  width: 99.9vw;
   margin:0;
   padding: 0;
   /* overflow: hidden; */
@@ -20,9 +20,11 @@ padding: 0;
    flex-direction: row;
    justify-content: space-between;
   background-color: black;
-  height: 12%;
+  height: 11%;
+  
   color: white;
 }
+
 
 
 .logoutDiv{
@@ -31,8 +33,8 @@ padding: 0;
   flex-direction: column;
   align-items: flex-end;
   padding-top: 1%;
+  font-family:'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif
   /* border: 2px solid yellow; */
-
 }
 
 .chat-app header {
@@ -42,8 +44,14 @@ padding: 0;
 }
 h1{
   margin-top: 1%;
+   font-family:'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif
 }
 
+.last-message{
+  font-family: 'Courier New', Courier, monospace;
+  font-size: smaller;
+  padding-top: 0.5%;
+}
 .container {
   display: flex;
   flex-direction: row;
@@ -126,28 +134,15 @@ h1{
   font-size: 14px;
 }
 
-.send-button {
-  margin-left: 10px;
-  padding: 8px 16px;
-  background-color: #007bff;
-  border: none;
-  border-radius: 4px;
-  color: #fff;
-  font-size: 14px;
-  cursor: pointer;
-}
+
 
 .input-box input:focus {
   outline: none;
 }
 
-/* .sidebar{
-width: 40vw;
-} */
-
 
 /* Updated CSS for the message list container */
-.scrollableDiv{
+#scrollableDiv{
   flex:1;
   /* border: 3px solid brown; */
 }
@@ -172,11 +167,11 @@ width: 40vw;
 
 
  .message-left {
-  text-align: left;
+  text-align: right;
 }
 
 .message-right {
-  text-align: right;
+  text-align:left;
 }
 
 .message-timestamp {
@@ -187,5 +182,65 @@ width: 40vw;
 .input-box{
   height: 2%;
   /* border: 2px solid blue; */
+}
+
+
+/* contact list css */
+
+.contact-list {
+  list-style-type: none;
+  padding: 0;
+  margin: 0;
+}
+
+.contact-list-item {
+  margin-bottom: 10px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+}
+.mainDiv{
+  display: flex;
+  flex-direction: column;
+  }
+
+.avatar {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  background-color: #ddd;
+  margin-right: 10px;
+  overflow: hidden;
+}
+
+.user-info {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.user-info h2 {
+  margin: 0;
+  font-size: 14px;
+}
+
+.user-info .name-timestamp {
+  display: flex;
+  align-items: center;
+}
+
+.user-info .name-timestamp .name {
+  font-weight: bold;
+  margin-right: 5px;
+}
+
+.user-info .timestamp {
+  font-size: 10px;
+  color: #888;
+  margin-left: auto;
+  margin-top: 0%;
+}
+.user-info .last-message{
+  margin: 0;
 }
 

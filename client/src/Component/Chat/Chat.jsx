@@ -14,6 +14,11 @@ import { useAlert } from "react-alert";
 import { getAllUsers } from "../../Actions/User";
 import { formatDistanceToNow, setWeekYear } from 'date-fns'
 import InputEmoji from "react-input-emoji";
+import Home from "../Home/Home";
+import { useNavigate } from 'react-router-dom';
+
+
+
 function Chat() {
 
   
@@ -45,12 +50,12 @@ function Chat() {
  
 
 
-
+  const navigate= useNavigate();
   const socket = useRef();
   const { user } = useSelector((state) => state.user)
   const scrollRef = useRef();
 
-  const { isAuthenticated } = useSelector((state) => state.user);
+  
 
   const { loading: AddMessageLoad, responseMessage, error: addMessageError } = useSelector(
     (state) => state.addMessage
@@ -231,7 +236,10 @@ try{
     <div className="chat-app">
     
         <div className="headerDiv" >
-          <h1>C h a t H u b</h1>
+  
+        
+          <h1 onClick={()=>navigate('/')}>C h a t H u b</h1>
+        
           <div className="logoutDiv" onClick={logoutUser}><LogoutIcon >Logout</LogoutIcon>Logout</div>
         </div>
       

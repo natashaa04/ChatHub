@@ -6,7 +6,7 @@ import {useSelector } from "react-redux";
 import { useEffect } from "react";
 import { loadUser } from "./Actions/User";
 import Chat from "./Component/Chat/Chat";
-
+import Home from "./Component/Home/Home";
 import Register from "./Component/Register/Register";
 
 
@@ -32,7 +32,8 @@ const App=()=> {
   <div>
     
     <Routes>
-<Route path="/" element={isAuthenticated ? <Chat/> : <Login />} />
+<Route path="/" element={isAuthenticated ? <Home/> : <Login />} />
+<Route path="/chats" element={isAuthenticated ? <Chat/> : <Login />} />
 <Route
   path="/login"
   element={isAuthenticated ? <Chat /> : <Login />}

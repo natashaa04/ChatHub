@@ -11,7 +11,7 @@ padding: 0;
   width: 99.9vw;
   margin:0;
   padding: 0;
-  /* overflow: hidden; */
+  overflow-x: hidden;
   /* border: 2px solid red; */
 }
 
@@ -32,7 +32,7 @@ padding: 0;
   display: flex;
   flex-direction: column;
   align-items: flex-end;
-  padding-top: 1%;
+  padding: 1%;
   font-family:'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif
   /* border: 2px solid yellow; */
 }
@@ -47,6 +47,10 @@ h1{
    font-family:'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif
 }
 
+.Link-to-home{
+  text-decoration: none;
+  color: #fff;
+}
 .last-message{
   font-family: 'Courier New', Courier, monospace;
   font-size: smaller;

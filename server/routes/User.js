@@ -5,6 +5,7 @@ import {
     logout,
     myProfile,
     getAllUsers,
+    addUser
  } from "../controllers/user-controller.js";
 
 import { isAuthenticated } from "../middleware/auth.js";
@@ -22,6 +23,9 @@ router.get("/me",isAuthenticated, myProfile);
 
 
 router.get("/users",isAuthenticated, getAllUsers);
+
+router.patch("/addUser/:userId",isAuthenticated, addUser);
+
 
 
 

@@ -5,50 +5,78 @@ import { getConversation } from "./conversation-controller.js";
 import { ObjectId } from "mongoose";
 
 
-//add new message
 export const addMessage = async (req, res) => {
   const messageData = req.body;
 
-   const conversationId =await getConversation(messageData.sender,messageData.reciever);
+  const conversationId = await getConversation(messageData.sender, messageData.reciever);
 
-   const newMessage = await new Message({
-   conversationId:conversationId,
-   sender: messageData.sender,
-   text: messageData.text,
+  const newMessage = await new Message({
+    conversationId: conversationId,
+    sender: messageData.sender,
+    text: messageData.text,
+    createdAt: messageData.createdAt,
   });
-console.log('new message is', newMessage);
+
   try {
     const savedMessage = await newMessage.save();
 
-    // Update the conversation's updatedAt field so that we can access conversation according to time 
+    // Update the conversation's updatedAt field so that we can access conversation according to time
     const conversation = await Conversation.findByIdAndUpdate(
       messageData.conversationId,
-      { updatedAt: Date.now() },
+      { updatedAt: messageData.createdAt },
       { new: true }
     );
-    const chatUser = await User.findByIdAndUpdate(
-      messageData.reciever,
-      { updatedAt: Date.now(),
-        lastMessage: messageData.text, 
-       },
-      { new: true }
+
+    // Update the sender's "last message" and "last message time" in the conversationUser array
+    await User.updateOne(
+      { _id: messageData.sender, 'conversationUser.userId': messageData.reciever },
+      {
+        $set: {
+          'conversationUser.$.lastMessage': messageData.text,
+          'conversationUser.$.lastMessageTime': messageData.createdAt,
+        },
+      }
     );
-    const me = await User.findByIdAndUpdate(
-      messageData.sender,
-      { updatedAt: Date.now(),
-          lastMessage: messageData.text, 
-       },
-      { new: true }
-    );
-    console.log('conversation is',conversation);
+
+    // Check if the receiver has the sender in their conversationUser array
+    const receiver = await User.findOne({ _id: messageData.reciever });
+
+    if (receiver) {
+      const existingUserIndex = receiver.conversationUser.findIndex(userObj => userObj.userId.equals(messageData.sender));
+
+      if (existingUserIndex !== -1) {
+        // Update the receiver's "last message" and "last message time"
+        receiver.conversationUser[existingUserIndex].lastMessage = messageData.text;
+        receiver.conversationUser[existingUserIndex].lastMessageTime = messageData.createdAt;
+        receiver.markModified('conversationUser');
+      } else {
+        // Add the sender to the receiver's conversationUser array
+        receiver.conversationUser.push({
+          userId: messageData.sender,
+          lastMessageTime: messageData.createdAt,
+          conversationId: conversationId,
+        });
+      }
+      await receiver.save();
+
+      // Sort the conversationUser array of the receiver
+      receiver.conversationUser.sort((a, b) => b.lastMessageTime - a.lastMessageTime);
+      receiver.markModified('conversationUser');
+      await receiver.save();
+    }
+
+    // Sort the conversationUser array of the sender
+    const sender = await User.findOne({ _id: messageData.sender });
+    sender.conversationUser.sort((a, b) => b.lastMessageTime - a.lastMessageTime);
+    sender.markModified('conversationUser');
+    await sender.save();
 
     res.status(200).json({ savedMessage, conversation });
   } catch (err) {
-    console.log('add message error is',err)
+    console.log('add message error is', err);
     res.status(500).json(err);
   }
 };
-
 
 
 

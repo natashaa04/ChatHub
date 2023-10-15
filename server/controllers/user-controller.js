@@ -1,7 +1,7 @@
 
 import User from "../models/UserSchema.js";
 import cloudinary from 'cloudinary';
-
+import { getConversation } from "./conversation-controller.js";
 
 
 
@@ -131,9 +131,13 @@ export const getAllUsers = async (req, res) => {
   try {
     // Assuming you have a way to identify the logged-in user
     const loggedInUserId = req.user.id; // Replace with the actual way you identify the user
-
+     
+    let users=[]
+    if(req.query.name==''){
+      res.status(200).json({success:true,users})
+    }else{
     // Modify the query to exclude the logged-in user
-    const users = await User.find({
+     users = await User.find({
       _id: { $ne: loggedInUserId }, // Exclude the user with the same ID as the logged-in user
       name: { $regex: req.query.name, $options: "i" },
     }).sort({ createdAt: -1 }) ;
@@ -142,7 +146,41 @@ export const getAllUsers = async (req, res) => {
       success: true,
       users,
     });
+  }
   } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: error.message,
+    });
+  }
+};
+
+export const myProfile = async (req, res) => {
+  try {
+    const userId = req.user._id;
+
+    // Find the user's profile
+    const user = await User.findOne({ _id: userId });
+
+    if (!user) {
+      return res.status(404).json({
+        success: false,
+        message: "User not found",
+      });
+    }
+
+    // Populate the conversationUser array with user details
+    await user.populate({
+      path: "conversationUser.userId",
+      select: "name avatar", // Add the fields you want to select
+    })
+
+    res.status(200).json({
+      success: true,
+      user,
+    });
+  } catch (error) {
+    console.log(error, 'error');
     res.status(500).json({
       success: false,
       message: error.message,
@@ -152,25 +190,43 @@ export const getAllUsers = async (req, res) => {
 
 
 
-export const myProfile = async (req, res) => {
-    try {
-      // console.log(req.user._id,'sss');
-      const user = await User.findOne({_id:req.user._id}) 
+
+
+export const addUser = async(req, res) => {
+  try {
+    const {  userId } = req.params;
+
+    // Get the conversation ID using the getConversation function
+    const conversationId = await getConversation(req.user._id, userId);
+
    
-     
-    
-      res.status(200).json({
-        success: true,
-        user,
-      });
-    } catch (error) {
-      console.log(error,'error');
-      res.status(500).json({
-        success: false,
-        message: error.message,
-      });
+
+    // Update the owner's conversationUser array
+    const owner = await User.findById(req.user._id);
+
+    if (!owner) {
+      return res.status(404).json({ message: 'Owner user not found' });
     }
-  };
 
+    const userExists = owner.conversationUser.some(userObj => userObj.userId.equals(userId));
 
-  
+    if (userExists) {
+      return res.status(400).json({ message: 'this user is already in your conversation list' });
+    }
+
+    // Add the user to the conversationUser array with timestamp and conversation ID
+    owner.conversationUser.push({
+      userId: userId,
+      lastMessageTime: new Date(),
+      conversationId: conversationId,
+    });
+
+    await owner.save();
+
+    res.status(200).json({ message: 'User added to your conversation list' });
+  } catch (error) {
+    console.error(error);
+    console.log('add user error is',error)
+    res.status(500).json(error);
+  }
+}

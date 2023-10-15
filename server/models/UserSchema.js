@@ -28,10 +28,29 @@ const userSchema = new mongoose.Schema({
     minlength: [6, "Password must be at least 6 characters"],
   
   },
-  lastMessage:{
-    type:String,
-  },
   
+  conversationUser:{
+    type: [
+    {
+      userId: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'User', // Reference to the User model
+      },
+      lastMessage: {
+        type: String,
+        default:'',
+      },
+      lastMessageTime: {
+        type: Date,
+      },
+      conversationId:{
+        type:mongoose.Schema.Types.ObjectId,
+        ref:'Conversation',
+      }
+    },
+  ],
+    default: [], 
+},
 
   resetPasswordToken: String,
   resetPasswordExpire: Date,

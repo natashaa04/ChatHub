@@ -29,6 +29,8 @@ try {
   }
 };
 
+
+
 //get all conversations of a particular user
 export const getAllConversations = async (req, res) => {
   try {
@@ -53,31 +55,37 @@ export const getAllConversations = async (req, res) => {
 
 
 
-//get users which are not in a conversation list of a user  for showing them in suggestions
-export const getUsersWithoutConversations = async (req, res) => {
-  try {
-    const userConversations = await Conversation.find({
-      members: { $in: [req.user._id] },
-    });
+// //get users which are not in a conversation list of a user  for showing them in suggestions
+// export const getUsersWithoutConversations = async (req, res) => {
+//   try {
+//     const userConversations = await Conversation.find({
+//       members: { $in: [req.user._id] },
+//     });
 
-    const conversationMembers = userConversations.reduce(
-      (members, conversation) => members.concat(conversation.members),
-      []
-    );
+//     const conversationMembers = userConversations.reduce(
+//       (members, conversation) => members.concat(conversation.members),
+//       []
+//     );
 
-    const page = req.query.page ? parseInt(req.query.page) : 1;
-    const limit = 10;
-    const skip = (page - 1) * limit;
+//     const page = req.query.page ? parseInt(req.query.page) : 1;
+//     const limit = 10;
+//     const skip = (page - 1) * limit;
 
-    const usersWithoutConversations = await User.find({
-      _id: { $nin: conversationMembers },
-    })
-      .skip(skip)
-      .limit(limit)
-      .exec();
+//     const usersWithoutConversations = await User.find({
+//       _id: { $nin: conversationMembers },
+//     })
+//       .skip(skip)
+//       .limit(limit)
+//       .exec();
 
-    res.status(200).json(usersWithoutConversations);
-  } catch (err) {
-    res.status(500).json(err);
-  }
-};
+//     res.status(200).json(usersWithoutConversations);
+//   } catch (err) {
+//     res.status(500).json(err);
+//   }
+// };
+
+
+
+
+
+

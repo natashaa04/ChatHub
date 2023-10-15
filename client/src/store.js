@@ -1,5 +1,5 @@
 import { configureStore, applyMiddleware } from "@reduxjs/toolkit";
-import { userReducer, allUsersReducer } from "./Reducers/User";
+import { userReducer, allUsersReducer,addUserReducer } from "./Reducers/User";
 import {
   addMessageReducer,
   getMessagesReducer,
@@ -15,6 +15,7 @@ const store = configureStore({
     getMessages: getMessagesReducer.reducer,
     getConversations: getConversationsReducer.reducer,
     suggestions: getSuggestionsReducer.reducer,
+    addUser:addUserReducer.reducer
   },
   // Other store configuration options (middleware, enhancers, etc.) can be added here
 });

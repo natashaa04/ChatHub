@@ -102,6 +102,34 @@ const allUsersReducer = createSlice({
 
 
 
+const addUserReducer = createSlice({
+  name:'addUser',
+  initialState,
+  reducers:{
+addUserRequest: (state) => {
+  state.loading = true;
+},
+addUserSuccess: (state, action) => {
+  state.loading = false;
+  state.message = action.payload;
+},
+addUserFailure: (state, action) => {
+  state.loading = false;
+  state.error = action.payload;
+},
+removeAddUserError:(state)=>{
+  state.error=null;
+},
+removeAddUserMessage:(state)=>{
+state.message=null;
+}
+
+
+},
+});
+
+
+
 
 export const {LoginRequest,
     LoginSuccess,
@@ -128,5 +156,14 @@ export const {LoginRequest,
     removeAllUsersMessage
   }=allUsersReducer.actions;
 
-  export {userReducer,allUsersReducer}
+  export const {
+    addUserRequest,
+    addUserSuccess,
+    addUserFailure,
+    removeAddUserError,
+    removeAddUserMessage
+  }=addUserReducer.actions;
+
+
+  export {userReducer,allUsersReducer,addUserReducer}
  

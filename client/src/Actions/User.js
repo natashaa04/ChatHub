@@ -19,7 +19,12 @@ import { LoginRequest ,
 
  allUsersRequest,
  allUsersSuccess,
- allUsersFailure
+ allUsersFailure,
+
+ 
+ addUserRequest,
+ addUserSuccess,
+ addUserFailure
 } from "../Reducers/User";
 
 
@@ -151,4 +156,20 @@ export const registerUser =
     
   };
 
+
+  export const addUser = async (userId) => {
+    try {
+      console.log('add user request')
+      store.dispatch(addUserRequest());
+  
+      const { data } = await axios.patch(`${URL}/api/v1/addUser/${userId}`,null, {
+        headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}` },
+      });
+       console.log('add user data is',data);
+      store.dispatch(addUserSuccess(data.message));
+    } catch (error) {
+      console.log('add user error is',error.response.data.message)
+      store.dispatch(addUserFailure(error.response.data.message));
+    }
+  };
 

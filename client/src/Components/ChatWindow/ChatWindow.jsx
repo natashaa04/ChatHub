@@ -1,53 +1,49 @@
 import React, { useState, useContext, useEffect, useRef, } from "react";
-import "./Chat.css";
 import { io } from "socket.io-client";
 import { addMessage} from "../../Actions/Message";
-import { logoutUser } from "../../Actions/User";
 import { useSelector } from "react-redux";
-import LogoutIcon from '@mui/icons-material/Logout';
 import { useMyContext } from "../../MyContextProvider";
 import InfiniteScroll from "react-infinite-scroll-component";
-import Loader from "../Loader/Loader";
 import axios from "axios";
-import { getConversation } from "../../Actions/Message";
 import { useAlert } from "react-alert";
-import { getAllUsers } from "../../Actions/User";
-import { formatDistanceToNow, setWeekYear } from 'date-fns'
+
 import InputEmoji from "react-input-emoji";
-import Home from "../Home/Home";
 import { useNavigate } from 'react-router-dom';
+import { loadUser } from "../../Actions/User";
 
 
 
-function Chat() {
 
-  
-  // const [currentChatMember, setCurrentChatMember] = useState(null);
-  const [Messages, setMessages] = useState([]);
+
+
+
+
+
+function ChatWindow() {
+
+
+//   const [Messages, setMessages] = useState([]);
   const [newMessage, setNewMessage] = useState("");
   const [arrivalMessage, setArrivalMessage] = useState(null);
-  const [onlineUsers, setOnlineUsers] = useState([]);
+
   const [page, setPage] = useState(2);
-  const [loading,setLoading]=useState(false);
-  const [conversations,setConversations]=useState(null)
-  const [lastMessage,setLastMessage]= useState(null);
+  
+  const [callUser,setCallUser]= useState(false);
 
   const [hasMoreMessages, setHasMoreMessages] = useState(true);
   
   
   const alert = useAlert();
-   const [Users, setUsers]= useState([]);
+
 
  
-  const {  users, error } = useSelector(
-    (state) => state.allUsers
-  );
   const {  user } = useSelector(
     (state) => state.user
   );
 
-  const {currentChatUser,setCurrentChatUser}= useMyContext();
+  const {currentChatUser,setCurrentChatUser,Messages, setMessages}= useMyContext();
  
+
 
 
  
@@ -57,30 +53,8 @@ function Chat() {
   const socket = useRef();
   const scrollRef = useRef();
 
+
   
-
-  const { loading: AddMessageLoad, responseMessage, error: addMessageError } = useSelector(
-    (state) => state.addMessage
-  );
-  
-
-
-  useEffect(()=>{
-    console.log('user is',user)
-  },[])
-
-
-  useEffect(()=>{
-
-    if(users){
-      setUsers(users);
-      console.log('users are',Users)
-    }
-    
-  },[users])
-
-
-
   useEffect(() => {
     socket.current = io("ws://localhost:8900");
 
@@ -89,6 +63,7 @@ function Chat() {
     socket.current.on("getMessage", (data) => {
       console.log('new real time message is',data);
       setArrivalMessage(data);
+      loadUser();
     });
   }, [user]);
 
@@ -97,13 +72,13 @@ function Chat() {
       setMessages((prev) => [...prev, arrivalMessage]);
   }, [arrivalMessage, currentChatUser]);
 
-  useEffect(() => {
-    // socket.current.emit("addUser", user._id);
-    socket.current.on("getUsers", (users) => {
-      setOnlineUsers(users);
-  console.log('online user is',onlineUsers);
-    });
-  }, [user]);
+  // useEffect(() => {
+  //   // socket.current.emit("addUser", user._id);
+  //   socket.current.on("getUsers", (users) => {
+  //     setOnlineUsers(users);
+  // console.log('online user is',onlineUsers);
+  //   });
+  // }, [user]);
 
 
   useEffect(() => {
@@ -112,31 +87,6 @@ function Chat() {
 
 
 
-  const updateChat=async(chatUser)=>{
-
-    console.log('chatUser is',chatUser)
-    
-    await setCurrentChatUser(chatUser);
-
-    setLoading(true);
-  
-    try{
-      
-      console.log('page is' ,page);
-      const { data } = await axios.get(`http://localhost:8000/api/v1/getMessages/${user._id}/${chatUser._id}/1`, {
-        headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}` },
-      });
-      console.log(`messages are ${data} and loading is ${loading}`)
-      setMessages(data);
-      setLoading(false);
-      
-    }catch(err){
-      console.log(`error while getting messages is ${err}`)
-    }
-    
-    
-  
-  }
 
   const handleSubmit = async (e) => {
     
@@ -167,10 +117,19 @@ function Chat() {
 
 
     setNewMessage("");
+    setCallUser(!callUser);
   }
 
-
   };
+
+  
+  useEffect(()=>{
+    loadUser();
+    console.log('user is',user)
+  },[callUser])
+
+
+
 
 function generateMessageKey(message) {
   const senderName = message.sender; 
@@ -211,6 +170,10 @@ try{
     console.log(`error while fetching more messages is ${err}`)
   }
   };
+
+
+
+
   function formatDate(timestamp) {
     const date = new Date(timestamp);
     const day = date.getDate().toString().padStart(2, '0');
@@ -224,48 +187,14 @@ try{
     const minutes = date.getMinutes().toString().padStart(2, '0');
     return `${hours}:${minutes}`;
   }
- const lastMessageShort=(input)=>{
-  if (input.length <= 8) {
-    return input; // Return the input as is if it's not longer than maxLength
-  } else {
-    return input.substring(0, 8) + '...'; // Display the first 5 characters with three dots
-  }
 
-  }
-    
+
+
+
 
   return (
-    <div className="chat-app">
-    
-        <div className="headerDiv" >
-  
-        
-          <h1 onClick={()=>navigate('/')}>C h a t H u b</h1>
-        
-          <div className="logoutDiv" onClick={logoutUser}><LogoutIcon >Logout</LogoutIcon>Logout</div>
-        </div>
-      
-      <div className="container">
-        <div className="sidebar">
-            
-    <div className="contact-list">
-      {user.conversationUser.map((chatUser) => (
-        <div key ={chatUser._id} className="contact-list-item"  onClick={() => updateChat(chatUser.userId)}>
-          <img src ={chatUser.userId.avatar.url}className="avatar"></img>   
-          <div className="user-info">
-            <div className="name-timestamp">
-            <h2 className="name">{chatUser.userId.name}</h2>
-            <p className="timestamp">{formatDistanceToNow(new Date(chatUser.lastMessageTime), { addSuffix: true })}</p>
-            </div>
-            <p className="last-message">{lastMessageShort(chatUser.lastMessage)}</p>
-         
-          </div>
-        </div>
-        
-      ))}
-    </div>
-        </div>
-        {currentChatUser && 
+    <>
+           {currentChatUser && 
           <div className="chat-window">
             <div className="chat-header">
               <img src={currentChatUser.avatar.url} className="avatar"></img>
@@ -323,15 +252,8 @@ try{
           </div>
 
         }
-      </div>
-
-
-
-    </div>
-
+    </>
   );
 }
 
-export default Chat;
-
-
+export default ChatWindow;

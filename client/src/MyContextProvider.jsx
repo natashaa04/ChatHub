@@ -10,13 +10,12 @@ export function useMyContext() {
 export function MyContextProvider({ children }) {
   
   const [currentChatUser, setCurrentChatUser] = useState(null);
+  const [Messages, setMessages] = useState([]);
 
-  const updateValue = (newValue) => {
-    setCurrentChatUser(newValue);
-  };
+
 
   return (
-    <MyContext.Provider value={{ currentChatUser, setCurrentChatUser }}>
+    <MyContext.Provider value={{ currentChatUser, setCurrentChatUser ,Messages, setMessages}}>
       {children}
     </MyContext.Provider>
   );

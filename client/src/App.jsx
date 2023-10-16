@@ -1,13 +1,13 @@
 import {  Routes, Route } from "react-router-dom";
 
-import Login from "./Component/Login/Login";
+import Login from "./pages/Login/Login";
 
 import {useSelector } from "react-redux";
 import { useEffect } from "react";
 import { loadUser } from "./Actions/User";
-import Chat from "./Component/Chat/Chat";
-import Home from "./Component/Home/Home";
-import Register from "./Component/Register/Register";
+import Chat from "./pages/Chat/Chat";
+import Home from "./pages/Home/Home";
+import Register from "./pages/Register/Register";
 
 
 

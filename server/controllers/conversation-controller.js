@@ -18,7 +18,7 @@ try {
     } else {
       // Conversation doesn't exist, create a new one
       const newConversation = new Conversation({
-        members:[req.params.firstUserId, req.params.secondUserId],
+        members:[user1,user2],
       });
 
       const savedConversation = await newConversation.save();

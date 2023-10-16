@@ -42,6 +42,9 @@ function Chat() {
   const {  users, error } = useSelector(
     (state) => state.allUsers
   );
+  const {  user } = useSelector(
+    (state) => state.user
+  );
 
   const {currentChatUser,setCurrentChatUser}= useMyContext();
  
@@ -52,7 +55,6 @@ function Chat() {
 
   const navigate= useNavigate();
   const socket = useRef();
-  const { user } = useSelector((state) => state.user)
   const scrollRef = useRef();
 
   
@@ -64,7 +66,7 @@ function Chat() {
 
 
   useEffect(()=>{
-    getAllUsers();
+    console.log('user is',user)
   },[])
 
 
@@ -247,13 +249,13 @@ try{
         <div className="sidebar">
             
     <div className="contact-list">
-      {Users.map((chatUser) => (
-        <div key ={chatUser._id} className="contact-list-item"  onClick={() => updateChat(chatUser)}>
-          <img src ={chatUser.avatar.url}className="avatar"></img>   
+      {user.conversationUser.map((chatUser) => (
+        <div key ={chatUser._id} className="contact-list-item"  onClick={() => updateChat(chatUser.userId)}>
+          <img src ={chatUser.userId.avatar.url}className="avatar"></img>   
           <div className="user-info">
             <div className="name-timestamp">
-            <h2 className="name">{chatUser.name}</h2>
-            <p className="timestamp">{formatDistanceToNow(new Date(chatUser.updatedAt), { addSuffix: true })}</p>
+            <h2 className="name">{chatUser.userId.name}</h2>
+            <p className="timestamp">{formatDistanceToNow(new Date(chatUser.lastMessageTime), { addSuffix: true })}</p>
             </div>
             <p className="last-message">{lastMessageShort(chatUser.lastMessage)}</p>
          

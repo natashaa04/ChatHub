@@ -199,8 +199,10 @@ export const addUser = async(req, res) => {
     // Get the conversation ID using the getConversation function
     const conversationId = await getConversation(req.user._id, userId);
 
-   
-
+   if(!conversationId){
+    res.status(400).json({message:'could not create conversation'})
+   }else{
+      
     // Update the owner's conversationUser array
     const owner = await User.findById(req.user._id);
 
@@ -212,7 +214,7 @@ export const addUser = async(req, res) => {
 
     if (userExists) {
       return res.status(400).json({ message: 'this user is already in your conversation list' });
-    }
+    }else{
 
     // Add the user to the conversationUser array with timestamp and conversation ID
     owner.conversationUser.push({
@@ -224,6 +226,8 @@ export const addUser = async(req, res) => {
     await owner.save();
 
     res.status(200).json({ message: 'User added to your conversation list' });
+  }
+}
   } catch (error) {
     console.error(error);
     console.log('add user error is',error)

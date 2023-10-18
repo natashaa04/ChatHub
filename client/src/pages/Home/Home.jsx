@@ -14,16 +14,38 @@ import { removeUserError ,removeUserMessage } from "../../Reducers/User";
 import { useAlert } from "react-alert";
 
 const Home = () => {
-  const [searchValue,setSearchhValue] = useState('');
+  const [searchValue,setSearchValue] = useState(false);
+  const [isMobileView, setIsMobileView] = useState(false);
+ 
+
   const { user } = useSelector((state) => state.user);
+  const {  users, error } = useSelector( (state) => state.allUsers );
+  const { message,error:addUserError } = useSelector((state) => state.addUser);
 
   const navigate= useNavigate();
   const dispatch= useDispatch();
   const alert = useAlert();
-   const {  users, error } = useSelector(
-    (state) => state.allUsers
-  );
-  const { message,error:addUserError } = useSelector((state) => state.addUser);
+  
+
+ 
+
+  useEffect(() => {
+    const mediaQuery = window.matchMedia("(max-width: 576px)");
+
+    const handleResize = (e) => {
+      console.log('e is',e,mediaQuery)
+      setIsMobileView(e.matches);
+    };
+
+    mediaQuery.addEventListener("change", handleResize);
+    handleResize(mediaQuery);
+
+    return () => {
+      mediaQuery.removeEventListener("change", handleResize);
+    };
+  }, []);
+
+  
 
   useEffect(() => {
     if (error) {
@@ -45,6 +67,9 @@ const Home = () => {
   }, [alert, error, message,addUserError]);
 
 
+
+
+
   const handleGoToMainChat = () => {
     console.log('cat');
       navigate('/chats')
@@ -54,6 +79,32 @@ const Home = () => {
     addUser(userId);
   }
 
+  const getResult=(e)=>{
+    if(e.target.value!==''){
+      setSearchValue(true);
+    }
+    getAllUsers(e.target.value)
+  }
+
+  const trimmedName=(input)=>{
+    
+    if(isMobileView){
+      if (input.length <= 15) {
+        return input; // Return the input as is if it's not longer than maxLength
+      } else {
+        return input.substring(0, 15) + '...'; // Display the first 5 characters with three dots
+      }
+    }
+    else{
+      if (input.length <= 30) {
+        return input; // Return the input as is if it's not longer than maxLength
+      } else {
+        return input.substring(0, 30) + '...'; // Display the first 5 characters with three dots
+      }
+    }
+  }
+
+
 
 
   return (
@@ -62,7 +113,7 @@ const Home = () => {
     <div className="headerDiv" >
  
         
-  <h1 >C h a t H u b</h1>
+  <h1 >C H A T H U B</h1>
 
   <div className="main-chat-button" onClick={handleGoToMainChat}>
         <ChatBubbleIcon/>
@@ -71,24 +122,24 @@ const Home = () => {
 <div className="home-container">
       <div className="userInfo">
         <img src={user.avatar.url} className="Avatar" alt="User Avatar" />
-        <strong>Hello {user.name}</strong>
+        <strong>{user.name}</strong>
       </div>
 
       <div className="searchBar">
         <input type="text"
          placeholder="Search here..." 
-        onChange={(e)=>getAllUsers(e.target.value)}
+        onChange={(e)=>getResult(e)}
         />
         </div>
         
         <div className="allUsers">
-          { users && users.map( (user) => (
+          {searchValue && users && users.map( (user) => (
             <div className= 'userAndAddButton' key={user._id}>
              <div className="homeUser">
             
              <img src={user.avatar.url} alt={user.name} className='avatar'  />
 
-             <Typography>{user.name}</Typography>
+             <Typography>{trimmedName(user.name)}</Typography>
              <div className='addButton'>
              <button onClick={()=>addFunction(user._id)} >ADD</button>
              </div>

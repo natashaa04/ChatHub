@@ -37,7 +37,7 @@ const Login = () => {
     <div className="login">
       <form className="loginForm" onSubmit={loginHandler}>
         <Typography variant="h3" style={{ padding: "2vmax" }}>
-          ChatHub
+          CHATHUB
         </Typography>
 
         <div className="inputContainer">
@@ -61,7 +61,7 @@ const Login = () => {
             onChange={(e) => setPassword(e.target.value)}
           />
           <Link to="/forgot/password" className="forgotPasswordLink">
-            <Typography variant="subtitle1">Forgot Password?</Typography>
+            {/* <Typography variant="subtitle1">Forgot Password?</Typography> */}
           </Link>
         </div>
 

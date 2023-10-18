@@ -4,8 +4,7 @@ import axios from "axios";
 import { useMyContext } from "../../MyContextProvider";
 import { useAlert } from "react-alert";
 import { formatDistanceToNow,  } from 'date-fns'
-import { useNavigate } from 'react-router-dom';
-
+import './ContactList.css'
 
 function ContactList() {
 
@@ -14,7 +13,7 @@ function ContactList() {
   const [loading,setLoading]=useState(false);
   const [callUser,setCallUser]= useState(false);
 
-  const [hasMoreMessages, setHasMoreMessages] = useState(true);
+const [hasMoreMessages, setHasMoreMessages] = useState(true);
   
   
   const alert = useAlert();
@@ -30,14 +29,10 @@ function ContactList() {
  
 
   useEffect(() => {
-    scrollRef.current?.scrollIntoView({ behavior: "smooth" });
-  }, [Messages]);
+    // console.log('userrr is',user);
+  }, []);
 
-
- 
-
-
-  const navigate= useNavigate();
+  
   const socket = useRef();
   const scrollRef = useRef();
 
@@ -46,16 +41,24 @@ function ContactList() {
 
       const lastMessageShort=(input)=>{
         if (input.length <= 8) {
-          return input; // Return the input as is if it's not longer than maxLength
+          return input;
         } else {
-          return input.substring(0, 8) + '...'; // Display the first 5 characters with three dots
+          return input.substring(0, 8) + '...'; 
         }
       
         }
+        const nameShort=(input)=>{
+          if (input.length <= 8) {
+            return input; 
+          } else {
+            return input.substring(0, 8) + '...';
+          }
+        
+          }
 
         const updateChat=async(chatUser)=>{
 
-          console.log('chatUser is',chatUser)
+          // console.log('chatUser is',chatUser)
           
           await setCurrentChatUser(chatUser);
       
@@ -87,7 +90,7 @@ function ContactList() {
         <img src ={chatUser.userId.avatar.url}className="avatar"></img>   
         <div className="user-info">
           <div className="name-timestamp">
-          <h2 className="name">{chatUser.userId.name}</h2>
+          <h2 className="name">{nameShort(chatUser.userId.name)}</h2>
           <p className="timestamp">{formatDistanceToNow(new Date(chatUser.lastMessageTime), { addSuffix: true })}</p>
           </div>
           <p className="last-message">{lastMessageShort(chatUser.lastMessage)}</p>

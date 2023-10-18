@@ -4,209 +4,31 @@
     padding: 0;
     }
     
-    .chat-app {
-      display: flex;
-      flex-direction: column;
-      height: 100vh;
-      width: 99.9vw;
-      margin:0;
-      padding: 0;
-      overflow-x: hidden;
-      /* border: 2px solid red; */
-    }
-    
-    .headerDiv{
-       display: flex;
-       flex-direction: row;
-       justify-content: space-between;
-      background-color: black;
-      height: 11%;
-      cursor: pointer;
-      color: white;
-    }
-    
-    
-    
-    .logoutDiv{
-       /* background-color: #888; */
-      display: flex;
-      flex-direction: column;
-      align-items: flex-end;
-      padding: 1%;
-      font-family:'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif
-      /* border: 2px solid yellow; */
-    }
-    
-    .chat-app header {
-      background-color: black;
-      color: white;
-      
-    }
-    h1{
-      margin-top: 1%;
-       font-family:'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif
-    }
-    
-    .Link-to-home{
-      text-decoration: none;
-      color: #fff;
-    }
-    .last-message{
-      font-family: 'Courier New', Courier, monospace;
-      font-size: smaller;
-      padding-top: 0.5%;
-    }
-    .container {
-      display: flex;
-      flex-direction: row;
-      flex: 1;
-      /* border: 10px dotted green; */
-      height: 67%;
-    
-    }
-    
-    .sidebar {
-      width:30%;
-      padding: 20px;
-      /* height: ; */
-      overflow-y: scroll;
-      border-right: 1px solid #ccc;
-      /* border: 3px solid orange; */
-    }
-    
-    .chat-window{
-      width:70%;
-      height: 100%;
-      /* border:10px dotted orange ; */
-      flex-direction: column;
-      display: flex;
-    }
-    
-    .chat-header {
-      display: flex;
-      align-items: center;
-      padding: 10px;
-      background-color: #fff;
-      border-bottom: 1px solid #ccc;
-      height: 5%;
-    }
-    
-    
-     .avatar {
-      width: 40px;
-      height: 40px;
-      border-radius: 50%;
-      background-color: #ddd;
-      margin-right: 10px;
-    }
-    
-    
-    .user-info {
-      flex: 1;
-      display: flex;
-      flex-direction: column;
-    }
-    .chat-header .user-info .online-status{
-      color:green;
-      
-    }
-    
-    .chat-header .user-info h2 {
-      margin: 0;
-      font-size: 16px;
-    }
-    
-    .chat-header .user-info p {
-      margin: 0;
-      font-size: 12px;
-      color: #888;
-    }
-    
-    .input-box {
-      background-color: #fff;
-      padding: 20px;
-      border-top: 1px solid #ccc;
-      display: flex;
-      align-items: center;
-    }
-    
-    .input-box input {
-      flex: 1;
-      padding: 10px;
-      border: 1px solid #ccc;
-      border-radius: 4px;
-      font-size: 14px;
-    }
-    
-    
-    
-    .input-box input:focus {
-      outline: none;
-    }
-    
-    
-    /* Updated CSS for the message list container */
-    #scrollableDiv{
-      flex:1;
-      /* border: 3px solid brown; */
-    }
-    .message-list {
-      background-color: #fff;
-      padding: 20px;
-      overflow-y: auto;
-      background-color: #fff;
-      /* border: 2px solid green; */
-        height:95vh ;
-    
-    }
-    /* Updated CSS for message content */
-    .message-content {
-      background-color: rgb(213, 211, 211);
-      padding: 8px 12px;
-      border-radius: 8px;
-      display: inline-block;
-      max-width: 70%; /* Limit message content to 80% of its parent's width */
-      word-wrap: break-word; /* Ensure long words break and don't overflow */
-    }
-    
-    
-     .message-left {
-      text-align: right;
-    }
-    
-    .message-right {
-      text-align:left;
-    }
-    
-    .message-timestamp {
-      font-size: 10px;
-      color: #888;
-      margin-left: 5px;
-    }
-    .input-box{
-      height: 2%;
-      /* border: 2px solid blue; */
-    }
-    
-    
+
     /* contact list css */
     
     .contact-list {
       list-style-type: none;
       padding: 0;
       margin: 0;
+      width:103%;
+      height: auto;
+      /* border: 2px solid red; */
     }
     
     .contact-list-item {
-      margin-bottom: 10px;
+       margin-bottom: 15px;
+      padding: 10px;
       cursor: pointer;
       display: flex;
       align-items: center;
+      width: 90%;
+      border-bottom: 2px solid grey;
+      border-radius: 1rem;
+      box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.1);
+    
     }
-    .mainDiv{
-      display: flex;
-      flex-direction: column;
-      }
+    
     
     .avatar {
       width: 50px;
@@ -221,6 +43,7 @@
       flex: 1;
       display: flex;
       flex-direction: column;
+  
     }
     
     .user-info h2 {

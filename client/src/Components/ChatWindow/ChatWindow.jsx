@@ -10,8 +10,8 @@ import { useAlert } from "react-alert";
 import InputEmoji from "react-input-emoji";
 import { useNavigate } from 'react-router-dom';
 import { loadUser } from "../../Actions/User";
-
-
+import ArrowBackIosIcon from '@mui/icons-material/ArrowBackIos';
+import './ChatWindow.css'
 
 
 
@@ -25,22 +25,16 @@ function ChatWindow() {
 //   const [Messages, setMessages] = useState([]);
   const [newMessage, setNewMessage] = useState("");
   const [arrivalMessage, setArrivalMessage] = useState(null);
-
-  const [page, setPage] = useState(2);
-  
+  const [page, setPage] = useState(2); 
   const [callUser,setCallUser]= useState(false);
-
   const [hasMoreMessages, setHasMoreMessages] = useState(true);
   
   
-  const alert = useAlert();
+
 
 
  
-  const {  user } = useSelector(
-    (state) => state.user
-  );
-
+  const {  user } = useSelector(   (state) => state.user);
   const {currentChatUser,setCurrentChatUser,Messages, setMessages}= useMyContext();
  
 
@@ -52,7 +46,7 @@ function ChatWindow() {
   const navigate= useNavigate();
   const socket = useRef();
   const scrollRef = useRef();
-
+   const alert = useAlert();
 
   
   useEffect(() => {
@@ -68,8 +62,13 @@ function ChatWindow() {
   }, [user]);
 
   useEffect(() => {
+
     arrivalMessage && currentChatUser._id == arrivalMessage.sender &&
       setMessages((prev) => [...prev, arrivalMessage]);
+
+     if(arrivalMessage && arrivalMessage.sender!==currentChatUser._id){
+ alert.success(`New Message from ${arrivalMessage.senderName}`)
+     }
   }, [arrivalMessage, currentChatUser]);
 
   // useEffect(() => {
@@ -89,10 +88,15 @@ function ChatWindow() {
 
 
   const handleSubmit = async (e) => {
+
+    if (Messages.length === 0) {
+      scrollRef.current?.scrollIntoView({ behavior: "smooth" });
+    }
+
     
     // e.preventDefault();
     if(newMessage){
-  console.log('new message is', newMessage)
+  // console.log('new message is', newMessage)
     const message = {
       sender: user._id,
       text: newMessage,
@@ -104,12 +108,13 @@ function ChatWindow() {
 
 
     setMessages((prev)=>[...prev,message]);
-    console.log('messages are', Messages)
+    // console.log('messages are', Messages)
 
     socket.current.emit("sendMessage", {
       sender: user._id,
       text: newMessage,
       reciever: currentChatUser._id,
+      senderName:user.name,
       // conversationId: conversations,
       createdAt: new Date().toISOString(),
     });
@@ -134,22 +139,18 @@ function ChatWindow() {
 function generateMessageKey(message) {
   const senderName = message.sender; 
   const createdAt = message.createdAt; 
-
-  
-  
   const key = `${senderName}_${createdAt}`;
-
   return key;
 }
 
 
   const fetchMoreData = async () => {
-    console.log(`currentchatuser is ${currentChatUser._id} and ${user._id}`)
+    // console.log(`currentchatuser is ${currentChatUser._id} and ${user._id}`)
     
 try{
     
     if (hasMoreMessages) {
-      console.log('page is in fetch data',page);
+      // console.log('page is in fetch data',page);
       const { data } = await axios.get(`http://localhost:8000/api/v1/getMessages/${user._id}/${currentChatUser._id}/${page}`, {
         headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}` },
       });
@@ -195,13 +196,17 @@ try{
   return (
     <>
            {currentChatUser && 
-          <div className="chat-window">
+          <div className="chat-windoww">
             <div className="chat-header">
+              <div onClick={()=>setCurrentChatUser(null)} >
+              <ArrowBackIosIcon />
+              </div>
               <img src={currentChatUser.avatar.url} className="avatar"></img>
               <div className="user-info">
                 <strong>{currentChatUser.name}</strong>
                 <p className="online-status">Online</p>
               </div>
+
             </div>
              <div
    id="scrollableDiv"
